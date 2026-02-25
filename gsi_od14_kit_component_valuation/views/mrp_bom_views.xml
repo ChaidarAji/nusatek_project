@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<record id="mrp_bom_form_view_inherit" model="ir.ui.view">
+		<field name="name">mrp.bom.form.inherit</field>
+		<field name="model">mrp.bom</field>
+		<field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='product_id']" position="after">
+				<field name="cost_currency_id" invisible="1"/>
+				<field name="cost" widget="monetary" readonly="1" options="{'currency_field': 'cost_currency_id'}" force_save="1"/>
+			</xpath>
+			<xpath expr="//field[@name='bom_line_ids']/tree/field[@name='product_qty']" position="after">
+				<field name="component_valuation_percentage" attrs="{'column_invisible': [('parent.type', '=', 'normal')]}"/>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>
