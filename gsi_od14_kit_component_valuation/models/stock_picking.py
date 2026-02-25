@@ -22,3 +22,40 @@ class StockPicking(models.Model):
                     })
         res = super(StockPicking, self).button_validate()
         return res
+
+    def _action_done(self):
+        """
+        Override to prevent additional items added to delivery orders
+        from being automatically added back to the sales order.
+
+        The standard sale_stock module (addons/sale_stock/models/stock.py lines 90-122)
+        automatically creates new SO lines for any moves in a delivery order that:
+        - Are linked to a sale order (picking.sale_id exists)
+        - Have destination location usage = 'customer'
+        - Are NOT already linked to a SO line (move.sale_line_id is False)
+        - Have quantity done > 0
+
+        This override calls the parent but prevents SO line creation by temporarily
+        clearing the sale_id from pickings with additional items.
+        """
+        # Identify pickings with additional items (moves without sale_line_id)
+        pickings_with_additional_items = {}
+        for picking in self:
+            additional_moves = picking.move_lines.filtered(
+                lambda m: not m.sale_line_id and picking.sale_id and
+                m.location_dest_id.usage == 'customer' and m.quantity_done > 0
+            )
+            if additional_moves:
+                # Store the original sale_id
+                pickings_with_additional_items[picking.id] = picking.sale_id.id
+                # Temporarily clear sale_id to prevent SO line creation
+                picking.write({'sale_id': False})
+
+        # Call parent method - it won't create SO lines because sale_id is False
+        res = super(StockPicking, self)._action_done()
+
+        # Restore the sale_id after validation
+        for picking_id, sale_id in pickings_with_additional_items.items():
+            self.browse(picking_id).write({'sale_id': sale_id})
+
+        return res
