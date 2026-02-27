@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="stock_picking_form_view_inherit" model="ir.ui.view">
+    <field name="name">stock_picking_form_inherit</field>
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="stock.view_picking_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='origin']" position="after">
+        <field name="project" attrs="{'readonly': [('state', 'in', ['done', 'cancel'])]}"/>
+        <field name="package" attrs="{'readonly': [('state', 'in', ['done', 'cancel'])]}"/>
+      </xpath>
+      <xpath expr="//header/button[@name='do_print_picking']" position="after">
+        <button name="print_7energi_delivery_order" string="7Energi Delivery Order" type="object" icon="fa-print" class="btn-primary" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+      </xpath>
+    </field>
+  </record>
+  
+</odoo>

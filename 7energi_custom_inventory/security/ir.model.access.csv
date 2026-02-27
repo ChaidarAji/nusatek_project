@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_7energi_custom_inventory_7energi_custom_inventory,7energi_custom_inventory.7energi_custom_inventory,model_7energi_custom_inventory_7energi_custom_inventory,base.group_user,1,1,1,1
