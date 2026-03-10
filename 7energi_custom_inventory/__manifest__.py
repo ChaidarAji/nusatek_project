@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name' : '7energi_custom_inventory',
-    'version' : '14.0.0.5',
+    'version' : '14.0.0.6',
     'summary': '''Custom Inventory And Printouts For 7Energi''',
     'sequence': 10,
     'author': 'Garudea',

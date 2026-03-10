@@ -31,7 +31,7 @@ class StockMove(models.Model):
         if self.inventory_id:
             inventory_lines = self.env['stock.inventory.line'].search([
                 ('inventory_id', '=', self.inventory_id.id),
-                ('product_id', '=', self.product_id.id)
+                ('product_id', 'in', self.product_id.ids)
             ], limit=1)
             if inventory_lines and inventory_lines.inventory_date:
                 self = self.with_context(force_svl_date=inventory_lines.inventory_date)
@@ -43,7 +43,7 @@ class StockMove(models.Model):
         if self.inventory_id:
             inventory_lines = self.env['stock.inventory.line'].search([
                 ('inventory_id', '=', self.inventory_id.id),
-                ('product_id', '=', self.product_id.id)
+                ('product_id', 'in', self.product_id.ids)
             ], limit=1)
             if inventory_lines and inventory_lines.inventory_date:
                 self = self.with_context(force_svl_date=inventory_lines.inventory_date)
