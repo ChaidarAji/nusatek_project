@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="budget_warning_wizard_action" model="ir.actions.act_window">
+        <field name="name">Budget Warning Wizard</field>
+        <field name="res_model">budget.warning.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="budget_warning_wizard_form" model="ir.ui.view">
+        <field name="name">Budget Warning Wizard</field>
+        <field name="model">budget.warning.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget Warning Wizard">
+                <group>
+                    <group>
+                        <field name="non_listed_account" readonly="1"/>
+                        <field name="non_listed_budgetary_position" readonly="1"/>
+                        <field name="insufficient_budget_list" readonly="1"/>
+                    </group>
+                    <group>
+
+                    </group>
+                </group>
+
+                <footer>
+                       <button string="Discard" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

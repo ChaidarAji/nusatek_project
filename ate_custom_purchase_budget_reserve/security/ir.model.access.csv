@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_budget_map_purchase_user,purchase.budget.map,model_purchase_budget_map,purchase.group_purchase_user,1,1,1,1
+access_purchase_budget_map_purchase_manager,purchase.budget.map,model_purchase_budget_map,purchase.group_purchase_manager,1,1,1,1
+access_budget_warning_wizard_purchase_user,budget.warning.wizard,model_budget_warning_wizard,purchase.group_purchase_user,1,1,1,1
+access_budget_warning_wizard_purchase_manager,budget.warning.wizard,model_budget_warning_wizard,purchase.group_purchase_manager,1,1,1,1

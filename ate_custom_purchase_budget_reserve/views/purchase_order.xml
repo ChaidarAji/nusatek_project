@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <data>
+
+
+        <record id="purchase_order_inherit_view_form" model="ir.ui.view">
+            <field name="name">purchase.order.inherit.view.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='button_confirm']" position="after">
+<!--                    <button name="generate_budget_map" string="Generate Budget Map" type="object"/>-->
+                    <button name="check_reserve_budget_limit" string="Check Budget" type="object" invisible="state not in ('draft', 'sent')"/>
+                </xpath>
+
+                <xpath expr="//button[@name='button_unlock']" position="after">
+                    <button name="revise_reserved_amount" string="Revise Reserved Amount" invisible="revise_reserved_state != True" type="object" class="oe_highlight"/>
+                </xpath>
+
+                <xpath expr="//page[@name='products']/field/tree/field[@name='product_id']" position="after">
+                    <field name="expense_account_id" domain="[('account_type', 'in', ('expense', 'expense_direct_cost'))]" optional="show"/>
+                </xpath>
+
+                <xpath expr="//div[@name='reminder']" position="after">
+                    <field name="budget_checked" force_save="1" readonly="1"/>
+                    <field name="all_service" invisible="1"/>
+                    <field name="committed_reserve_amount" invisible="False" readonly="1"/>
+                    <field name="revised_reserved_amount" invisible="False" readonly="1"/>
+                    <field name="revise_reserved_state" invisible="True" readonly="1"/>
+                </xpath>
+
+                <xpath expr="//page[@name='products']/field/tree/field[@name='analytic_distribution']" position="replace">
+                    <field name="analytic_distribution" widget="analytic_distribution"
+                                           column_invisible="True"
+                                           options="{'product_field': 'product_id', 'business_domain': 'purchase_order', 'amount_field': 'price_subtotal'}"/>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page name="budget_map" string="Budget Map">
+                        <field name="budget_map_ids" nolabel="1" readonly="1">
+                            <tree>
+                                <field name="po_line_id" column_invisible="True"/>
+                                <field name="product_id"/>
+                                <field name="uom"/>
+                                <field name="currency_id" column_invisible="True"/>
+                                <field name="expense_account_id"/>
+                                <field name="analytic_account_id"/>
+                                <field name="detected_budgetary_position"/>
+                                <field name="status"/>
+                                <field name="remaining_amt"/>
+                                <field name="amount"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="purchase_order_analytic_distribution_inherit_form" model="ir.ui.view">
+            <field name="name">purchase.order.analytic.distribution.inherit.view.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="globle_analytic_distribution.view_purchase_form_analytic"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//label[@for='analytic_distribution']" position="after">
+                    <label for="analytic_account_id" string="Analytic Account"/>
+                </xpath>
+
+                <xpath expr="//label[@for='analytic_distribution']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+
+                </xpath>
+
+                <xpath expr="//div/field[@name='analytic_distribution']" position="before">
+                    <field name="analytic_account_id" domain="[('active', '=', True)]" required="1"/>
+                </xpath>
+
+                <xpath expr="//div/field[@name='analytic_distribution']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+<!--                <xpath expr="//button[@name='update_analytic_distribution']" position="attributes">-->
+<!--                    <attribute name="invisible">0</attribute>-->
+<!--                </xpath>-->
+
+            </field>
+        </record>
+
+    </data>
+
+</odoo>
