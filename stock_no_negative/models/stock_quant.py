@@ -37,7 +37,10 @@ class StockQuant(models.Model):
 
             # dics add (change quant.quantity to q_quantity)
             q_quantity = quant.quantity
-            if self.env.context.get('q_quantity'):
+            q_quantity_map = self.env.context.get('q_quantity_map')
+            if q_quantity_map and quant.product_id.id in q_quantity_map:
+                q_quantity = q_quantity_map[quant.product_id.id]
+            elif self.env.context.get('q_quantity'):
                 q_quantity = self.env.context.get('q_quantity')
 
             if (
