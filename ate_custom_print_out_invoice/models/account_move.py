@@ -1,8 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-import time
-from deep_translator import GoogleTranslator
+
+try:
+    from num2words import num2words
+except ImportError:
+    num2words = None
+
+# Odoo's currency_unit_label / currency_subunit_label are in English
+# ("Rupiah"/"Cents", "Dollars"/"Cents"), so map the Indonesian wording by ISO code.
+CURRENCY_LABELS_ID = {
+    'IDR': ('Rupiah', 'Sen'),
+    'USD': ('Dolar Amerika Serikat', 'Sen'),
+    'SGD': ('Dolar Singapura', 'Sen'),
+    'EUR': ('Euro', 'Sen'),
+}
 
 
 class AccountMove(models.Model):
@@ -23,70 +35,41 @@ class AccountMove(models.Model):
         readonly=True
     )
 
-    # def text_indonesian(self):
-    #     total = self.currency_id.with_context(lang='id_ID').amount_to_text(self.amount_total)
-    #     translated = GoogleTranslator(source='auto', target='id').translate(total)
-    #     return translated
+    def _num2words_id(self, number):
+        """Terbilang: ubah angka menjadi kata dalam Bahasa Indonesia."""
+        try:
+            return num2words(number, lang='id').title()
+        except NotImplementedError:
+            return num2words(number, lang='en').title()
 
-    # #max retry 10 kali call google translator
-    # def text_indonesian(self):
-    #     total = self.currency_id.with_context(lang='id_ID').amount_to_text(self.amount_total)
-
-    #     max_retry = 10
-    #     retry_delay = 2
-
-    #     for attempt in range(max_retry):
-    #         try:
-    #             translated = GoogleTranslator(
-    #                 source='auto',
-    #                 target='id'
-    #             ).translate(total)
-
-    #             # Cek apakah response merupakan error
-    #             if translated and "Error 500" not in translated:
-    #                 return translated
-
-    #         except Exception as e:
-    #             # GoogleTranslator gagal dipanggil
-    #             pass
-
-    #         # Jika gagal, tunggu sebelum mencoba lagi
-    #         time.sleep(retry_delay)
-
-    #     # Jika semua percobaan gagal
-    #     return total
-
-   #call google translator sampai berhasil
     def text_indonesian(self):
-        total = self.currency_id.with_context(lang='id_ID').amount_to_text(self.amount_total)
+        self.ensure_one()
+        if num2words is None:
+            return ''
 
-        error_indicators = [
-            "Error 500",
-            "Server Error",
-            "That's an error",
-            "There was an error",
-            "Please try again later",
-        ]
+        currency = self.currency_id
+        unit_label, subunit_label = CURRENCY_LABELS_ID.get(
+            currency.name,
+            (currency.currency_unit_label, currency.currency_subunit_label),
+        )
 
-        while True:
-            try:
-                translated = GoogleTranslator(
-                    source='auto',
-                    target='id'
-                ).translate(total)
+        amount = self.amount_total
+        sign = 'Minus ' if amount < 0 else ''
 
-                if translated and not any(
-                    error_text.lower() in translated.lower()
-                    for error_text in error_indicators
-                ):
-                    return translated
+        # Split the same way amount_to_text() does, so the words match the printed figure.
+        formatted = "%.{0}f".format(currency.decimal_places) % abs(amount)
+        parts = formatted.partition('.')
+        integer_value = int(parts[0])
+        fractional_value = int(parts[2] or 0)
 
-            except Exception:
-                pass
-
-            # Jangan langsung request berulang-ulang
-            time.sleep(2)
-
+        amount_words = '%s%s %s' % (
+            sign, self._num2words_id(integer_value), unit_label,
+        )
+        if fractional_value:
+            amount_words += ' %s %s' % (
+                self._num2words_id(fractional_value), subunit_label,
+            )
+        return amount_words
 
     @api.model
     def _increment_print_count(self):
