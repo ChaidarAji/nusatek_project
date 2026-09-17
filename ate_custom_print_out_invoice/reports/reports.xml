@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="ate_invoice_paper_format" model="report.paperformat">
+            <field name="name">ATE Invoice Paper Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">80</field>
+            <field name="header_spacing">75</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+        </record>
+
+        <record id="action_ate_account_invoice" model="ir.actions.report">
+            <field name="name">ATE Invoice</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ate_custom_print_out_invoice.report_ate_invoice_document</field>
+            <field name="report_file">ate_custom_print_out_invoice.report_ate_invoice_document</field>
+            <field name="paperformat_id" ref="ate_custom_print_out_invoice.ate_invoice_paper_format"/>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

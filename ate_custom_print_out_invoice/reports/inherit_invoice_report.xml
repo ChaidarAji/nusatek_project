@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_invoice_document_custom" inherit_id="account.report_invoice_document">
+        <xpath expr="//h2" position="after">
+            <t t-if="o.move_type == 'in_invoice'">
+                <div>
+                    <t t-if="o.print_count == 0">
+                        ORIGINAL PRINT
+                    </t>
+                    <t t-else="">
+                        DUPLICATE PRINT #<t t-esc="o.print_count - 1"/>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

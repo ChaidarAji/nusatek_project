@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="account_move_efaktur_form_view_inherit" model="ir.ui.view">
+        <field name="name">account.move.efaktur.form.view.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="l10n_id_efaktur.account_move_efaktur_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='l10n_id_csv_created']" position="after">
+                <field name="bukti_potong" string="Bukti Potong"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="account_move_form_view_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.view.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_uom_id']" position="before">
+                <field name="quantity_ordered" column_invisible="True"/>
+                <field name="termin_percentage" column_invisible="True"/>
+                <field name="site_id" optional="show"/>
+                <field name="site_name" optional="show"/>
+            </xpath>
+            <xpath expr="//group[@name='sale_info_group']//field[@name='delivery_date']" position="after">
+                <field name="termin"/>
+            </xpath>
+            <xpath expr="//group[@name='accounting_info_group']//field[@name='to_check']" position="after">
+                <field name="print_count" invisible="move_type not in ['out_invoice', 'in_invoice']"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
