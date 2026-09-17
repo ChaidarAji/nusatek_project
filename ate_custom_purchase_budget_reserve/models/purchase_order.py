@@ -141,11 +141,22 @@ class PurchaseOrder(models.Model):
                 raise ValidationError("NO VALIDATED BUDGET DATA FOUND. "
                                                       "Please Check Your Budget Record, Make Sure It Is In VALIDATED State")
 
+            #UcaSam's code : budget lines are always stored in company currency
+            company_id = rec.company_id
+            company_currency = company_id.currency_id
+            conversion_date = (rec.date_order or fields.Datetime.now()).date()
+
             for line in rec.order_line:
 
                 expense_account_id = line.expense_account_id
 
                 budget_post = budgetary_position_rec.search([('account_ids', 'in', expense_account_id.id)])
+
+                #UcaSam's code : convert the line subtotal when the order uses a foreign currency
+                line_amount = line.price_subtotal
+                if company_currency and rec.currency_id and rec.currency_id != company_currency:
+                    line_amount = company_currency._convert(
+                        line_amount, rec.currency_id, company_id, conversion_date)
 
                 base_vals = {
                     'po_line_id': line.id,
@@ -153,7 +164,7 @@ class PurchaseOrder(models.Model):
                     'expense_account_id': expense_account_id.id,
                     'analytic_account_id': analytic_account_id.id,
                     'uom': line.product_uom.id,
-                    'amount': line.price_subtotal,
+                    'amount': line_amount,
                 }
 
                 if budget_post:
