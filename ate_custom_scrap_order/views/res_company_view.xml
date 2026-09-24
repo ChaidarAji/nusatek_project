@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ate_scrap_view_res_company_inherit_form" model="ir.ui.view">
+        <field name="name">res.company.form.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="multi_scrap_orders" string="Multi Scrap Orders">
+                    <group>
+                        <group string="Check total amount on multi scrap with planned amount on budget">
+                            <field name="is_scrap_limit_to_budget"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
