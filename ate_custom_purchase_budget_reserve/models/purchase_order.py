@@ -652,7 +652,7 @@ class PurchaseBudgetMap(models.Model):
     po_line_id = fields.Many2one('purchase.order.line', string="PO Line ID")
     product_id = fields.Many2one('product.template', string="Product")
     uom = fields.Many2one('uom.uom', string="UoM")
-    currency_id = fields.Many2one(related="order_id.currency_id", string="Currency", store=True)
+    currency_id = fields.Many2one(related="order_id.company_id.currency_id", string="Currency", store=True)
     analytic_account_id = fields.Many2one('account.analytic.account', string="Analytic Account")
     expense_account_id = fields.Many2one('account.account', string="Expense Account")
     detected_budgetary_position = fields.Many2one('account.budget.post', string="Detected Budgetary Position")
@@ -661,8 +661,6 @@ class PurchaseBudgetMap(models.Model):
                                ('insufficient', 'Insufficient'), ('no_expense', 'Expense Account Not Found'),
                                ('non_listed_budgetary', 'Non-Listed Budgetary')], string="Budget Status", default="unchecked")
     remaining_amt = fields.Monetary(string="Remaining(Current)")
-
-
 
 
 

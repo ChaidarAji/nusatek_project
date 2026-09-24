@@ -2,7 +2,7 @@
 
 {
     "name": "Budget Customization",
-    "version": "17.0.1.6",
+    "version": "17.0.1.7",
     "summary": "Manage budget reservation from purchase transaction",
     'author': 'Garudea',
     'developer': "Vadivel Duraisamy UcaSam_dev",
