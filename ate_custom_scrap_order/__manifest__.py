@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'ATE Custom Scrap Order',
-    'version': '17.0.0.16',
+    'version': '17.0.0.17',
     'summary': 'create analytic distribution, configuration scrap limit to budget, and blocker budget on validate multi scrap button',
     'author': 'Garudea',
     'developer': "Janbaz",

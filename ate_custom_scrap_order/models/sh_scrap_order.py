@@ -10,7 +10,7 @@ class ScrapOrder(models.Model):
     analytic_distribution = fields.Json('Analytic Distribution', compute="_compute_analytic_distribution", store=True,
                                         copy=True)
 
-    account_analytic_id = fields.Many2one('account.analytic.account', string='Analytic Distribution')
+    account_analytic_id = fields.Many2one('account.analytic.account', string='Analytic Account')
 
     def update_analytic_distribution(self):
         for line in self.sh_scrap_order_line:
