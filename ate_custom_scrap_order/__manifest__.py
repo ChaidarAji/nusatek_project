@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'ATE Custom Scrap Order',
-    'version': '17.0.0.17',
+    'version': '17.0.0.18',
     'summary': 'create analytic distribution, configuration scrap limit to budget, and blocker budget on validate multi scrap button',
     'author': 'Garudea',
-    'developer': "Janbaz",
+    'developer': "Janbaz,Chaidar",
     'category': 'Inventory',
-    'depends': ['base','account_budget','analytic', 'account', 'stock','stock_account', 'sh_multi_scrap_order'],
+    'depends': ['base', 'stock', 'account', 'sh_multi_scrap_order', 'stock_account', 'account_budget', 'analytic',
+                'ate_custom_invoice_bill'],
     'data': [
         "views/res_company_view.xml",
         "views/stock_view.xml",
